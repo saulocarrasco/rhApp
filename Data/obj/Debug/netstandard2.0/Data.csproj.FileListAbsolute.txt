@@ -1,0 +1,9 @@
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\bin\Debug\netstandard2.0\Data.deps.json
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\bin\Debug\netstandard2.0\Data.dll
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\obj\Debug\netstandard2.0\Data.csprojResolveAssemblyReference.cache
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\obj\Debug\netstandard2.0\Data.csproj.CoreCompileInputs.cache
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\obj\Debug\netstandard2.0\Data.AssemblyInfoInputs.cache
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\obj\Debug\netstandard2.0\Data.AssemblyInfo.cs
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\bin\Debug\netstandard2.0\Data.pdb
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\obj\Debug\netstandard2.0\Data.dll
+C:\Users\Saulo Carrasco\source\repos\RhApp\Data\obj\Debug\netstandard2.0\Data.pdb
