@@ -11,6 +11,8 @@ namespace Data.Model
         public List<Competition> Competitions { get; set; }
         public List<Training> Trainings { get; set; }
         public List<WorkExperience> WorkExperiences { get; set; }
-        public string Reference { get; set; }
+        public int EmployeeId { get; set; }
+        // Reference
+        public Employee Employee { get; set; }
     }
 }

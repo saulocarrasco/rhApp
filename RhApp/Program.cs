@@ -16,10 +16,9 @@ namespace RhApp
         [STAThread]
         static void Main()
         {
-            new RhDataBase();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new FrmCompetitions(new RhDataService(new RhDataBase())));
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Data.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Text;
 
@@ -8,9 +9,9 @@ namespace Data.Repository
 {
     public class RhDataBase : DbContext
     {
-        public RhDataBase() : base("AzureRhConnection")
+        public RhDataBase() : base("name=AzureRhConnection")
         {
-            Database.SetInitializer(new DropCreateDatabaseAlways<RhDataBase>());
+           // Database.SetInitializer(new DropCreateDatabaseAlways<RhDataBase>());
         }
         public DbSet<Candidate> Candidates { get; set; }
         public DbSet<Competition> Competencies { get; set; }
