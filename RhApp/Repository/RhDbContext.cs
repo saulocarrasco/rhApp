@@ -13,7 +13,8 @@ namespace Data.Repository
         public RhDataBase() : base("name=AzureRhConnection")
         {
             //Database.SetInitializer(new DropCreateDatabaseAlways<RhDataBase>());
-            Configuration.AutoDetectChangesEnabled = false;
+            Configuration.AutoDetectChangesEnabled = true;
+            Configuration.LazyLoadingEnabled = true;
         }
         public DbSet<Candidate> Candidates { get; set; }
         public DbSet<Competition> Competencies { get; set; }
@@ -24,5 +25,6 @@ namespace Data.Repository
         public DbSet<Person> Persons { get; set; }
         public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<UserCredential> UserCredentials { get; set; }
+
     }
 }

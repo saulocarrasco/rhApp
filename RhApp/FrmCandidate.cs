@@ -177,10 +177,6 @@ namespace RhApp
                 Name = txtName.Text,
                 Department = txtDeparment.Text,
                 SalaryLike = salaryLike.Value,
-                Competitions = competitions.ToList(),
-                Trainings = trainings.ToList(),
-                WorkExperiences = workExperience.ToList(),
-                Languages = languages.ToList(),
                 AspirePosition = positionSelected.Name,
                 Status = Model.ObjectStatus.Enable
             };
@@ -188,6 +184,12 @@ namespace RhApp
             try
             {
                 _rhDataService.Add(candidate);
+
+                candidate.Languages = (List<Language>)LstLanguages.DataSource;
+                candidate.Competitions = (List<Competition>)LstCompetitions.DataSource;
+                candidate.Trainings = (List<Training>)LstLanguages.DataSource;
+                candidate.WorkExperiences = (List<WorkExperience>)LstWorkExperiencies.DataSource;
+
                 _rhDataService.Save();
 
                 MessageBox.Show("Candidato guardado satisfactoriamente");
