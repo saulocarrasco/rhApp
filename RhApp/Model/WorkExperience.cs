@@ -1,10 +1,11 @@
-﻿using System;
+﻿using RhApp.Model;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Data.Model
 {
-    public class WorkExperience
+    public class WorkExperience : IBaseInterface
     {
         public int Id { get; set; }
         public string Company { get; set; }
@@ -14,5 +15,6 @@ namespace Data.Model
         public decimal Salary { get; set; }
         public int? CandidateId { get; set; }
         public Candidate Candidate { get; set; }
+        public ObjectStatus Status { get; set; }
     }
 }

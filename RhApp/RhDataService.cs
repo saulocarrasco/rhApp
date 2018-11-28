@@ -1,5 +1,6 @@
 ﻿using Data.Model;
 using Data.Repository;
+using RhApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -37,14 +38,30 @@ namespace RhApp
 
         }
 
-        public IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class
+        public IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class, IBaseInterface
         {
-            var result = _repository.Set<TEntity>().AsEnumerable();
+            //var p = Expression.Parameter(typeof(TEntity));
+            //var expr = Expression.Lambda(Expression.PropertyOrField(p, "Status"), p);
+            
+            //Expression.Equal(expr, )
+
+            var result = _repository.Set<TEntity>().Where(i=>i.Status == ObjectStatus.Enable).AsNoTracking().AsEnumerable();
             return result;
+        }
+
+        private void ClearTracking()
+        {
+            var trackingObject = _repository.ChangeTracker.Entries().Where(i => i.State == EntityState.Added || i.State == EntityState.Modified || i.State == EntityState.Deleted);
+
+            foreach(var t in trackingObject)
+            {
+                _repository.Entry(t.Entity).State = EntityState.Detached;
+            }
         }
 
         public void Update<TEntity>(TEntity model) where TEntity : class
         {
+            //ClearTracking();
             _repository.Entry(model).State = EntityState.Modified;
             ValidModel(model);
         }

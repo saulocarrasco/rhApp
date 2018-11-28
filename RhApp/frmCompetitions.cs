@@ -1,5 +1,6 @@
 ﻿using Data;
 using Data.Repository;
+using RhApp.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,26 +20,36 @@ namespace RhApp
         public FrmCompetitions(RhDataService service)
         {
             _service = service;
-            
+
             InitializeComponent();
             LstCpts.DataSource = _service.GetAll<Competition>().ToList();
+            LstCpts.AutoGenerateColumns = false;
         }
 
         private void CmdSave_Click(object sender, EventArgs e)
         {
-            var competition = new Competition
-            {
-                Name = txtNameCpt.Text,
-                Description = txtDescription.Text,
-                Status = CompetitionStatus.Enable
-            };
 
             try
             {
-                _service.Add(competition);
+                if(!string.IsNullOrWhiteSpace(txtId.Text))
+                {
+                    Update();
+                }
+                else
+                {
+                    var competition = new Competition
+                    {
+                        Name = txtNameCpt.Text,
+                        Description = txtDescription.Text,
+                        Status = ObjectStatus.Enable
+                    };
+
+                    _service.Add(competition);
+                }
+                
                 var result = _service.Save();
 
-                if(result > 0)
+                if (result > 0)
                 {
                     MessageBox.Show("La competencia se guardo correctamente.");
                 }
@@ -49,47 +60,114 @@ namespace RhApp
             }
 
             LstCpts.DataSource = _service.GetAll<Competition>().ToList();
+
+            ClearInputs();
         }
 
         private void CmdEdit_Click(object sender, EventArgs e)
         {
-            if(LstCpts.SelectedRows.Count < 0)
+            if (LstCpts.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Debe seleccionar la competencia ha editar");
                 return;
             }
 
-            var competition = new Competition
+            var row = LstCpts.SelectedRows[0];
+            txtId.Text = row.Cells["Id"].Value.ToString();
+            txtNameCpt.Text = row.Cells["Name"].Value.ToString();
+            txtDescription.Text = row.Cells["Description"].Value.ToString();
+        }
+
+        private void Update()
+        {
+
+            if (LstCpts.SelectedRows.Count == 0)
             {
-                Id = Convert.ToInt32(txtId.Text),
-                Name = txtNameCpt.Text,
-                Description = txtDescription.Text,
-                Status = CompetitionStatus.Enable
-            };
+                MessageBox.Show("Debe seleccionar la competencia ha editar");
+                return;
+            }
+
+            var id = Convert.ToInt32(txtId.Text);
+            var competition = _service.GetAll<Competition>().FirstOrDefault(i => i.Id == id);
+            competition.Name = txtNameCpt.Text;
+            competition.Description = txtDescription.Text;
+            competition.Status = ObjectStatus.Enable;
 
             try
             {
                 _service.Update(competition);
-                _service.Save();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void CmdDelete_Click(object sender, EventArgs e)
+        {
+            var rowSelected = LstCpts.SelectedRows;
+
+
+            if (LstCpts.SelectedRows.Count <= 0)
+            {
+                MessageBox.Show("Debe seleccionar el registro que desea borrar.");
+
+                return;
+            }
+
+            var id = Convert.ToInt32(LstCpts.SelectedRows[0].Cells["Id"].Value);
+            var competition = _service.GetAll<Competition>().FirstOrDefault(i => i.Id == id);
+            competition.Status = ObjectStatus.Disabled;
+
+            _service.Update(competition);
+            _service.Save();
+
+            MessageBox.Show("Competencia Eliminada correctamente.");
 
             LstCpts.DataSource = _service.GetAll<Competition>().ToList();
 
+            ClearInputs();
+        }
+
+        private void CmdSearch_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtSearch.Text))
+            {
+                MessageBox.Show("Escriba el valor que desea buscar.");
+                return;
+            }
+
+            var filter = _service.GetAll<Competition>().Where(i => i.Name.ToUpper().StartsWith(txtSearch.Text.ToUpper()) || i.Description.ToUpper().StartsWith(txtSearch.Text.ToUpper()));
+
+            if(filter.Count() > 0)
+            {
+                LstCpts.DataSource = filter.ToList();
+            }
+            else
+            {
+                LstCpts.DataSource = _service.GetAll<Competition>().ToList();
+                MessageBox.Show("No hay resultados para su busqueda.");
+            }
+
+            txtSearch.Text = "";
+        }
+
+        private void CmdClear_Click(object sender, EventArgs e)
+        {
+            ClearInputs();
+        }
+
+        private void ClearInputs()
+        {
+            txtId.Text = "";
+            txtNameCpt.Text = "";
+            txtDescription.Text = "";
+            LstCpts.ClearSelection();
         }
 
         private void LstCpts_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;
-
-            var row = LstCpts.Rows[e.RowIndex];
-
-            txtId.Text = row.Cells[0].Value.ToString();
-            txtNameCpt.Text = row.Cells[1].Value.ToString();
-            txtDescription.Text = row.Cells[2].Value.ToString();
+            LstCpts.Rows[e.RowIndex].Selected = true;
         }
     }
 }
